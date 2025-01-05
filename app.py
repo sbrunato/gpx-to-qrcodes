@@ -9,6 +9,15 @@ from PIL import Image, ImageDraw, ImageFont
 
 st.markdown("# GPX waypoints to QR codes")
 
+st.markdown(
+    """
+    [![GitHub][github_badge]][github_link]
+
+    [github_badge]: https://badgen.net/badge/icon/GitHub?icon=github&color=black&label
+    [github_link]: https://github.com/sbrunato/gpx-to-qrcodes
+    """
+)
+
 with st.sidebar:
     url_template = st.text_input(
         "URL template", "http://maps.google.com/?q={wp.latitude},{wp.longitude}"
