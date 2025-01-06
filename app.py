@@ -77,9 +77,7 @@ qr = qrcode.QRCode(
     border=1,
 )
 
-font = ImageFont.load_default()
-font.size = font_size
-
+font = ImageFont.load_default(size=font_size)
 
 uploaded_file = st.file_uploader("Choose a GPX file")
 if uploaded_file is not None:
@@ -109,14 +107,13 @@ if uploaded_file is not None:
             qr_img = qr_img.resize((img_width, img_height))
 
             # size of the text
-            text_bbox = font.getbbox(title)
-            title_width = text_bbox[2] - text_bbox[0]
-            title_height = text_bbox[3] - text_bbox[1]
+            left, top, right, bottom = font.getbbox(title)
+            title_width, title_height = right - left, bottom - top
 
             qr_width, qr_height = qr_img.size
 
             # Add padding
-            new_height = qr_height + title_height + title_padding
+            new_height = qr_height + title_height + title_padding * 2
             new_img = Image.new("RGB", (qr_width, new_height), "white")
             # Paste the QR code into the new image
             new_img.paste(qr_img, (0, 0))
@@ -124,9 +121,9 @@ if uploaded_file is not None:
             # Add the text
             draw = ImageDraw.Draw(new_img)
             # Center the text horizontally
-            text_x = (qr_width - title_width) // 2
+            text_x = (qr_width - title_width) / 2
             # Place the text below the QR code with padding
-            text_y = qr_height + title_padding // 2
+            text_y = title_padding + qr_height - title_height / 2
             draw.text((text_x, text_y), title, fill="black", font=font)
 
             images_list.append((new_img, f"{img_stem}.{img_format}"))
